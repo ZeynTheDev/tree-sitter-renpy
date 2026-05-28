@@ -1,9 +1,19 @@
 module.exports = grammar({
   name: 'renpy',
 
+  externals: $ => [
+    $._newline,
+    $._indent,
+    $._dedent,
+  ],
+
   extras: $ => [
-    /[ \t]/,        // ignore spaces and tabs
-    /\r?\n[ \t]*/,  // ignore newlines with leading whitespace
+    /[ \t]/,  // only spaces and tabs, NOT newlines
+    $.comment, // comment would also categorized as extras
+  ],
+
+  conflicts: $ => [
+    [$.label_statement], // it use optional($.block) in its structure so that's why
   ],
 
   rules: {
@@ -23,7 +33,7 @@ module.exports = grammar({
       $.init_statement,
       $.return_statement,
       $.pause_statement,
-      $.comment,
+      $._newline,
     ),
 
     // ── Core Statements ──────────────────────────────────────
@@ -32,103 +42,126 @@ module.exports = grammar({
       'label',
       $.identifier,
       ':',
+      $._newline,
+      optional($.block),
     ),
 
     say_statement: $ => choice(
-      $.string,
-      seq($.identifier, $.string),
+      seq($.string, $._newline),
+      seq($.identifier, $.string, $._newline),
     ),
 
     jump_statement: $ => seq(
       'jump',
       $.identifier,
+      $._newline,
     ),
 
     call_statement: $ => seq(
       'call',
       $.identifier,
+      $._newline,
     ),
 
-    return_statement: $ => 'return',
+    return_statement: $ => seq(
+      'return',
+      $._newline,
+    ),
 
     pause_statement: $ => seq(
       'pause',
       optional($.number),
+      $._newline,
     ),
 
     // ── Scene/Show/Hide ───────────────────────────────────────
-    
+
     scene_statement: $ => seq(
       'scene',
       $.image_name,
+      optional(seq('at', $.transform_property)),
+      $._newline,
     ),
 
     show_statement: $ => seq(
       'show',
       $.image_name,
+      optional(seq('at', $.transform_property)),
+      $._newline,
     ),
+
+    transform_property: $ => repeat1($.identifier),
 
     hide_statement: $ => seq(
       'hide',
       $.image_name,
+      $._newline,
     ),
+
+    // ── Menu ─────────────────────────────────────────────────
 
     menu_statement: $ => seq(
       'menu',
       ':',
-      $.indented_block,
+      $._newline,
+      repeat($._newline),
+      $._indent,
+      repeat1($.menu_choice),
+      $._dedent,
     ),
 
-    menu_choice: $ => prec.left(seq(
+    menu_choice: $ => seq(
       $.string,
       ':',
-      repeat($._statement),
-    )),
+      $._newline,
+      optional($.block),
+    ),
 
-    // ── Inline Python ─────────────────────────────────────────
+    // ── Blocks ───────────────────────────────────────────────
+
+    block: $ => seq(
+      repeat($._newline),
+      $._indent,
+      repeat1($._statement),
+      $._dedent,
+    ),
+
+    // ── Python ───────────────────────────────────────────────
 
     python_line: $ => seq(
       '$',
       $.python_content,
+      $._newline,
     ),
 
     python_block: $ => seq(
       'python',
       ':',
+      $._newline,
       $.indented_block,
     ),
 
     init_statement: $ => choice(
-      // init python:
-        //     code
-        seq(
-          'init',
-          'python',
-          ':',
-          $.indented_block,
-        ),
-        // init:
-        //     code
-        seq(
-          'init',
-          ':',
-          $.indented_block,
-        ),
-        // init 5 python:  (with priority number)
-        seq(
-          'init',
-          $.number,
-          'python',
-          ':',
-          $.indented_block,
-        ),
+      seq('init', 'python', ':', $._newline, $.indented_block),
+      seq('init', ':', $._newline, $.block),
+      seq('init', $.number, 'python', ':', $._newline, $.indented_block),
     ),
 
-    indented_block: $ => /(\n[ \t]+.+)+/,
+    // opaque block for raw python content
+    indented_block: $ => seq(
+      repeat($._newline),
+      $._indent,
+      repeat1(choice(
+        seq($.python_content, $._newline),
+        $._newline // letting a line only contains \n (empty line)
+      )),
+      $._dedent,
+    ),
 
-    python_content: $ => /.+/,
+    python_content: $ => /[^\n]+/,
 
-    // image_name is a sequence of identifiers on the same line
+    // ── Image names ──────────────────────────────────────────
+
     image_name: $ => prec.left(repeat1($.identifier)),
 
     // ── Primitives ────────────────────────────────────────────

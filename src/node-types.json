@@ -1,5 +1,68 @@
 [
   {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "call_statement",
+          "named": true
+        },
+        {
+          "type": "hide_statement",
+          "named": true
+        },
+        {
+          "type": "init_statement",
+          "named": true
+        },
+        {
+          "type": "jump_statement",
+          "named": true
+        },
+        {
+          "type": "label_statement",
+          "named": true
+        },
+        {
+          "type": "menu_statement",
+          "named": true
+        },
+        {
+          "type": "pause_statement",
+          "named": true
+        },
+        {
+          "type": "python_block",
+          "named": true
+        },
+        {
+          "type": "python_line",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "say_statement",
+          "named": true
+        },
+        {
+          "type": "scene_statement",
+          "named": true
+        },
+        {
+          "type": "show_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "call_statement",
     "named": true,
     "fields": {},
@@ -45,6 +108,21 @@
     }
   },
   {
+    "type": "indented_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "python_content",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "init_statement",
     "named": true,
     "fields": {},
@@ -52,6 +130,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "block",
+          "named": true
+        },
         {
           "type": "indented_block",
           "named": true
@@ -83,11 +165,34 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
+          "type": "block",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "menu_choice",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -98,11 +203,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "indented_block",
+          "type": "menu_choice",
           "named": true
         }
       ]
@@ -154,6 +259,11 @@
     }
   },
   {
+    "type": "return_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "say_statement",
     "named": true,
     "fields": {},
@@ -177,11 +287,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "image_name",
+          "named": true
+        },
+        {
+          "type": "transform_property",
           "named": true
         }
       ]
@@ -192,11 +306,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "image_name",
+          "named": true
+        },
+        {
+          "type": "transform_property",
           "named": true
         }
       ]
@@ -213,10 +331,6 @@
       "types": [
         {
           "type": "call_statement",
-          "named": true
-        },
-        {
-          "type": "comment",
           "named": true
         },
         {
@@ -276,6 +390,21 @@
     "fields": {}
   },
   {
+    "type": "transform_property",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "\"",
     "named": false
   },
@@ -292,12 +421,17 @@
     "named": false
   },
   {
+    "type": "at",
+    "named": false
+  },
+  {
     "type": "call",
     "named": false
   },
   {
     "type": "comment",
-    "named": true
+    "named": true,
+    "extra": true
   },
   {
     "type": "hide",
@@ -305,10 +439,6 @@
   },
   {
     "type": "identifier",
-    "named": true
-  },
-  {
-    "type": "indented_block",
     "named": true
   },
   {
@@ -344,8 +474,8 @@
     "named": true
   },
   {
-    "type": "return_statement",
-    "named": true
+    "type": "return",
+    "named": false
   },
   {
     "type": "scene",

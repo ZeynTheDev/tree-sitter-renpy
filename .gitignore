@@ -12,7 +12,7 @@ build/
 target/
 
 # Dev test files
-test.rpy
+*.rpy
 
 # OS
 .DS_Store

@@ -1,8 +1,10 @@
 # tree-sitter-renpy
+> [!NOTE]
+> Current version: v0.1.0 | Extension Repository: [zeynthedev/zed-renpy-extension](https://github.com/ZeynTheDev/zed-renpy-extension) | [Full Changelog](changelog.md)
+
 Grammar for Ren'Py Zed extension.
 
 # Changelog of Current version
-Read the full documentation of changelog [here](changelog.md)
 ### Supported
 - Label statements (`label`)
 - Say statements (narrator and character dialogue)
