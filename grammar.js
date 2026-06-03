@@ -34,6 +34,12 @@ module.exports = grammar({
       $.return_statement,
       $.pause_statement,
       $._newline,
+      $.define_statement,
+      $.default_statement,
+      $.play_statement,
+      $.stop_statement,
+      $.queue_statement,
+      $.with_statement,
     ),
 
     // ── Core Statements ──────────────────────────────────────
@@ -76,27 +82,9 @@ module.exports = grammar({
 
     // ── Scene/Show/Hide ───────────────────────────────────────
 
-    scene_statement: $ => seq(
-      'scene',
-      $.image_name,
-      optional(seq('at', $.transform_property)),
-      $._newline,
-    ),
-
-    show_statement: $ => seq(
-      'show',
-      $.image_name,
-      optional(seq('at', $.transform_property)),
-      $._newline,
-    ),
+    
 
     transform_property: $ => repeat1($.identifier),
-
-    hide_statement: $ => seq(
-      'hide',
-      $.image_name,
-      $._newline,
-    ),
 
     // ── Menu ─────────────────────────────────────────────────
 
@@ -160,9 +148,95 @@ module.exports = grammar({
 
     python_content: $ => /[^\n]+/,
 
-    // ── Image names ──────────────────────────────────────────
+    // ── Variable Declaration ─────────────────────────────────────────────────
+    define_statement: $ => seq(
+      'define',
+      field('name', $.dotted_name),
+      '=',
+      field('value', $.python_content),
+    ),
+
+    default_statement: $ => seq(
+      'default',
+      field('name', $.dotted_name),
+      '=',
+      field('value', $.python_content),
+    ),
+
+    // ── Audio ─────────────────────────────────────────────────
+    play_statement: $ => seq(
+      'play',
+      field('channel', $.identifier),
+      field('file', choice($.string, $.identifier)),
+      // handle special keywords as "fadeout 1.0"
+      repeat(choice(
+        seq('fadein', $.number),
+        seq('fadeout', $.number),
+        seq('volume', $.number),
+        'loop',
+        'noloop',
+      )),
+    ),
+
+    stop_statement: $ => seq(
+      'stop',
+      field('channel', $.identifier),
+      // handle special keywords as "fadeout 1.0"
+      repeat(choice(
+        seq('fadein', $.number),
+        seq('fadeout', $.number),
+        seq('volume', $.number),
+        'loop',
+        'noloop',
+      )),
+    ),
+
+    queue_statement: $ => seq(
+      'queue',
+      field('channel', $.identifier),
+      field('file', choice($.string, $.identifier)),
+      // handle special keywords as "fadeout 1.0"
+      repeat(choice(
+        seq('fadein', $.number),
+        seq('fadeout', $.number),
+        seq('volume', $.number),
+        'loop',
+        'noloop',
+      )),
+    ),
+
+    // ── 3. Image Display ──────────────────────────────────────────
 
     image_name: $ => prec.left(repeat1($.identifier)),
+
+    show_statement: $ => seq(
+      'show',
+      $.image_name,
+      optional(seq('at', $.transform_property)),
+      $._newline,
+    ),
+
+    scene_statement: $ => seq(
+      'scene',
+      $.image_name,
+      optional(seq('at', $.transform_property)),
+      $._newline,
+    ),
+
+    hide_statement: $ => seq(
+      'hide',
+      $.image_name,
+      $._newline,
+    ),
+
+    // ── 3.1. With Statement ──────────────────────────────────────────
+    with_statement: $ => seq(
+      'with',
+      field('transition', choice(
+        $.dotted_name,
+        'None',
+      )),
+    ),
 
     // ── Primitives ────────────────────────────────────────────
 
@@ -176,5 +250,10 @@ module.exports = grammar({
     comment: $ => /#[^\n]*/,
 
     number: $ => /\d+(\.\d+)?/,
+
+    dotted_name: $ => seq(
+      $.identifier,
+      repeat(seq('.', $.identifier)),
+    ),
   }
 });

@@ -1,9 +1,27 @@
 # Changelog
 >[!NOTE]
-> Current Version: 0.2.0
+> Current Version: 0.3.0
 
 ## Table of Contents
-[v0.2.0](#v020---fix-indentation-parser-nested-blocks-and-python-isolation) | [v0.1.0](#v010---initial-release)
+[v0.3.0](#v030---the-minimalist-flow-update) | [v0.2.0](#v020---fix-indentation-parser-nested-blocks-and-python-isolation) | [v0.1.0](#v010---initial-release)
+
+## v0.3.0 - The Minimalist Flow Update
+
+### Added
+- **Variable Declarations:** Added grammar rules for `define_statement` and `default_statement`.
+- **Audio Controls:** Added parsing support for `play_statement`, `stop_statement`, and `queue_statement`.
+- **Audio Modifiers:** Supported optional clauses in audio statements (`fadein`, `fadeout`, `volume`, `loop`, `noloop`).
+- **Transitions:** Added rule for `with_statement` handling both custom transitions and `None`.
+- **Namespace Support:** Introduced `dotted_name` rule to correctly parse dot-separated identifiers (e.g., `audio.track_name`).
+
+### Fixed
+- Resolved parsing errors when variables contained dots (namespaces) by replacing raw `identifier` calls with the new `dotted_name` rule in relevant statements.
+
+### Known Issues
+- GUI and layout blocks are not yet parsed (`screen`, `style`, `transform`, `image`).
+- **Partial Syntax Coverage:** The grammar currently covers the core visual novel flow but does not yet cover the entirety of the [official Ren'Py documentation](https://www.renpy.org/doc/html/). Full syntax support will be implemented in incremental phases.
+
+---
 
 ## v0.2.0 - Fix Indentation Parser, Nested Blocks, and Python Isolation
 ### Supported
@@ -27,6 +45,8 @@
 - Missing support for audio control statements (`play`, `stop`, `queue`).
 - GUI and layout blocks are not yet parsed (`screen`, `style`, `transform`, `image`).
 - Transition statements (`with`) are not yet explicitly mapped.
+
+---
 
 ## v0.1.0 - Initial Release
 ### Supported
