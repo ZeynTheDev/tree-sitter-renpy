@@ -1,9 +1,31 @@
 # Changelog
 >[!NOTE]
-> Current Version: 0.3.0
+> Current Version: 0.4.0
 
 ## Table of Contents
-[v0.3.0](#v030---the-minimalist-flow-update) | [v0.2.0](#v020---fix-indentation-parser-nested-blocks-and-python-isolation) | [v0.1.0](#v010---initial-release)
+[v0.4.0](#v040---the-renpy-language-milestone) | [v0.3.0](#v030---the-minimalist-flow-update) | [v0.2.0](#v020---fix-indentation-parser-nested-blocks-and-python-isolation) | [v0.1.0](#v010---initial-release)
+
+## v0.4.0 - The Ren'Py Language Milestone
+*This massive update completes the core syntax coverage corresponding to Chapter 1 ("The Ren'Py Language") of the official documentation. Read further official documentation [here](https://www.renpy.org/doc/html/).*
+
+### Added
+- **Full Conditional Statements:** Added rules for `if`, `elif`, `else`, `while`, and `pass` statements.
+- **Advanced Display & Camera:** Added `image`, `camera`, and `show layer` statements. Expanded `show`, `scene`, and `hide` with comprehensive property clauses (`as`, `at`, `behind`, `onlayer`, `zorder`, `with`).
+- **Dialogue Enhancements:** Supported `window` statement, inline image attributes (`e @ happy -sad`), and `rpy` statements.
+- **Advanced Menus:** Supported `set` clauses, menu arguments, and conditional menu choices (`if`).
+- **Expanded Audio & Voice:** Upgraded `play`, `stop`, and `queue` to support variable lists (`["a.ogg"]`) and full clauses (`fadein`, `fadeout`, `volume`, `loop`, `if_changed`). Added `voice` and `voice sustain` statements.
+
+### Changed
+- **Variable Definitions:** `define` and `default` now support array indexing (e.g., `inventory["apple"]`) via the new `variable_name` rule.
+- **Init Refinements:** `init` statements now correctly differentiate between standard Ren'Py blocks and pure Python blocks (`init python:`), and support negative priorities (`init -5`).
+- **Architecture:** `grammar.js` has been completely restructured and heavily commented into numbered Chapters and Sections corresponding to the official Ren'Py documentation for superior maintainability.
+
+### Known Issues
+- GUI, layout blocks, and complex transformations are not yet parsed (`screen`, `style`, `transform`, ATL blocks).
+- Full syntax support will continue in incremental phases targeting Customizing the GUI and Screens.
+- **Testing Scope:** Testing has primarily been conducted using synthetic/generated `.rpy` files. We highly encourage testing this grammar against real-world Ren'Py projects! Feedback, bug reports, and suggestions from actual development scenarios are greatly appreciated.
+
+---
 
 ## v0.3.0 - The Minimalist Flow Update
 

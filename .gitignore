@@ -12,6 +12,7 @@ build/
 target/
 
 # Dev test files
+test_files/
 *.rpy
 
 # OS
